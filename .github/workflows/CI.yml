@@ -122,5 +122,8 @@ jobs:
       #   with:
       #     command: upload
       #     args: --non-interactive --skip-existing *
+      - name: List
+        run: |
+          ls -al *
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
