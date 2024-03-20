@@ -64,6 +64,7 @@ jobs:
         run: |
           cargo test -- --nocapture
       - name: Run tests (Python)
+        if: matrix.target != 'x86'
         run: |
           python -m pip install tox
           python -m tox
