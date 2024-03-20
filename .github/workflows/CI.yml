@@ -60,7 +60,10 @@ jobs:
           python-version: '3.10'
           architecture: ${{ matrix.target }}
       - name: Run tests (Rust)
+        env:
+          PYO3_PRINT_CONFIG: 1
         run: |
+          rustc --version
           cargo test -- --nocapture
       - name: Run tests (Python)
         env:
