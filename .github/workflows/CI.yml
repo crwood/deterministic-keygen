@@ -61,6 +61,8 @@ jobs:
           python-version: '3.10'
           architecture: ${{ matrix.target }}
       - name: Run tests (Rust)
+        env:
+          CARGO_TARGET: i686-pc-windows-msvc
         run: |
           rustc --print target-list
           rustc --version
