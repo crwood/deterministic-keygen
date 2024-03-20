@@ -63,7 +63,10 @@ jobs:
         run: |
           cargo test -- --nocapture
       - name: Run tests (Python)
+        env:
+          PYO3_PRINT_CONFIG: 1
         run: |
+          rustc --version
           python -m pip install tox
           python -m tox
       - name: Build wheels
