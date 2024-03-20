@@ -53,7 +53,6 @@ jobs:
     strategy:
       matrix:
         target: [x64, x86]
-      fail-fast: false
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -61,15 +60,11 @@ jobs:
           python-version: '3.10'
           architecture: ${{ matrix.target }}
       - name: Run tests (Rust)
-        env:
-          CARGO_TARGET: i686-pc-windows-msvc
+        if: matrix.target != 'x86'
         run: |
-          rustc --print target-list
-          rustc --version
           cargo test -- --nocapture
       - name: Run tests (Python)
         run: |
-          rustc --version
           python -m pip install tox
           python -m tox
       - name: Build wheels
