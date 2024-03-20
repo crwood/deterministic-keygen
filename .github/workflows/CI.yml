@@ -60,11 +60,15 @@ jobs:
           python-version: '3.10'
           architecture: ${{ matrix.target }}
       - name: Run tests (Rust)
-        if: matrix.target != 'x86'
+        # x86 builds fail with "error: your Rust target architecture
+        # (64-bit) does not match your python interpreter (32-bit)"
+        if: matrix.target != 'x86' # FIXME
         run: |
           cargo test -- --nocapture
       - name: Run tests (Python)
-        if: matrix.target != 'x86'
+        # x86 builds fail with "error: your Rust target architecture
+        # (64-bit) does not match your python interpreter (32-bit)"
+        if: matrix.target != 'x86' # FIXME
         run: |
           python -m pip install tox
           python -m tox
