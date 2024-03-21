@@ -8,8 +8,7 @@ name: CI
 on:
   push:
     branches:
-      - main
-      - master
+      - '*'
     tags:
       - '*'
   pull_request:
@@ -29,6 +28,13 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+      - name: Run tests (Rust)
+        run: |
+          cargo test -- --nocapture
+      - name: Run tests (Python)
+        run: |
+          python -m pip install tox
+          python -m tox
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -53,6 +59,19 @@ jobs:
         with:
           python-version: '3.10'
           architecture: ${{ matrix.target }}
+      - name: Run tests (Rust)
+        # x86 builds fail with "error: your Rust target architecture
+        # (64-bit) does not match your python interpreter (32-bit)"
+        if: matrix.target != 'x86' # FIXME
+        run: |
+          cargo test -- --nocapture
+      - name: Run tests (Python)
+        # x86 builds fail with "error: your Rust target architecture
+        # (64-bit) does not match your python interpreter (32-bit)"
+        if: matrix.target != 'x86' # FIXME
+        run: |
+          python -m pip install tox
+          python -m tox
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
@@ -75,6 +94,13 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+      - name: Run tests (Rust)
+        run: |
+          cargo test -- --nocapture
+      - name: Run tests (Python)
+        run: |
+          python -m pip install tox
+          python -m tox
       - name: Build wheels
         uses: PyO3/maturin-action@v1
         with:
