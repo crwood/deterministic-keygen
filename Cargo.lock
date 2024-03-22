@@ -130,17 +130,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "degen"
-version = "0.0.4"
-dependencies = [
- "blake3",
- "pyo3",
- "rand_chacha",
- "rsa",
- "tiny-bip39",
-]
-
-[[package]]
 name = "der"
 version = "0.8.0-pre.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -149,6 +138,17 @@ dependencies = [
  "const-oid",
  "pem-rfc7468",
  "zeroize",
+]
+
+[[package]]
+name = "deterministic-keygen"
+version = "0.1.0"
+dependencies = [
+ "blake3",
+ "pyo3",
+ "rand_chacha",
+ "rsa",
+ "tiny-bip39",
 ]
 
 [[package]]
