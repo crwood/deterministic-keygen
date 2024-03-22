@@ -1,11 +1,11 @@
 [package]
-name = "degen"
+name = "deterministic-keygen"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
-name = "degen"
+name = "deterministic_keygen"
 crate-type = ["cdylib"]
 
 [dependencies]

@@ -1,4 +1,4 @@
-from degen import generate_phrase, derive_rsa_key_from_phrase
+from deterministic_keygen import generate_phrase, derive_rsa_key_from_phrase
 
 
 def test_generate_phrase_returns_12_words() -> None:

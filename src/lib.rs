@@ -11,7 +11,7 @@ use std::str;
 // "The context string should be hardcoded, globally unique, and application-specific.
 // A good default format for the context string is '[application] [commit timestamp]
 // [purpose]':"
-const RSA_CONTEXT: &str = "degen Wed 07 Feb 2024 11:50:00 AM EST RSA v1";
+const RSA_CONTEXT: &str = "deterministic-keygen Wed 07 Feb 2024 11:50:00 AM EST RSA v1";
 
 /// Generate a new BIP-39 mnemonic phrase.
 #[pyfunction]
@@ -74,7 +74,7 @@ pub fn derive_rsa_key_from_phrase(phrase: &str, bit_size: usize) -> PyResult<Str
 
 /// Deterministic key-generator.
 #[pymodule]
-fn degen(_py: Python, m: &PyModule) -> PyResult<()> {
+fn deterministic_keygen(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(generate_phrase, m)?)?;
     m.add_function(wrap_pyfunction!(derive_rsa_key_from_phrase, m)?)?;
     Ok(())
