@@ -134,24 +134,14 @@ jobs:
     if: "startsWith(github.ref, 'refs/tags/')"
     needs: [linux, windows, macos, sdist]
     permissions:
-      # IMPORTANT: this permission is mandatory for trusted publishing
-      # as per https://docs.pypi.org/trusted-publishers/using-a-publisher/
+      # This permission is mandatory for trusted publishing as per
+      # https://docs.pypi.org/trusted-publishers/using-a-publisher/
       id-token: write
     steps:
       - uses: actions/download-artifact@v3
         with:
           name: wheels
-      # - name: Publish to PyPI
-      #   uses: PyO3/maturin-action@v1
-      #   env:
-      #     MATURIN_PYPI_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-      #   with:
-      #     command: upload
-      #     args: --non-interactive --skip-existing *
-      - name: List
-        run: |
-          ls -al *
-      - name: Publish package distributions to PyPI
+      - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: .
