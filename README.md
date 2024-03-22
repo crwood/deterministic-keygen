@@ -1,7 +1,7 @@
-Degen - a deterministic key-generator
-=====================================
+Deterministic-keygen
+====================
 
-_Degen_ is an experimental Rust and Python library for generating cryptographic keys deterministically, i.e., repeatably deriving the same key-material (output) given the same initial bytes of entropy (input). This can be used by applications to regenerate or restore a given key from some user-supplied input (for example, a BIP-39 mnemonic phrase), potentially enabling more "human-friendly" forms of key backup and recovery.
+_Deterministic-keygen_ is an experimental Rust and Python library for generating cryptographic keys deterministically, i.e., repeatably deriving the same key-material (output) given the same initial bytes of entropy (input). This can be used by applications to regenerate or restore a given key from some user-supplied input (for example, a BIP-39 mnemonic phrase), potentially enabling more "human-friendly" forms of key backup and recovery.
 
 Currently, only RSA keys are supported.
 
