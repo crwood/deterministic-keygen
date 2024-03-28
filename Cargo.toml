@@ -9,6 +9,7 @@ name = "deterministic_keygen"
 crate-type = ["cdylib"]
 
 [dependencies]
+anyhow = "1.0.0"
 blake3 = "1.5.0"
 pyo3 = "0.19.2"
 rand_chacha = "0.3.1"
