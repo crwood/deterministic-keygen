@@ -49,15 +49,18 @@ fn test_phrase_to_entropy() {
 
 /// Derive an RSA key from a given vector of unsigned 8-bit integers.
 // #[pyfunction]
-pub fn derive_rsa_key(entropy: &Vec<u8>, bit_size: usize) -> Result<String, rsa::Error> {
+pub fn derive_rsa_key(entropy: &Vec<u8>, bit_size: usize) -> Result<String, Error> {
     let seed: [u8; 32] = blake3::derive_key(RSA_CONTEXT, &entropy);
     let mut rng = ChaCha20Rng::from_seed(seed);
-    let priv_key = RsaPrivateKey::new(&mut rng, bit_size).expect("failed to generate private key");
-    let pem = priv_key
-        .to_pkcs8_pem(LineEnding::LF)
-        .expect("failed to encode private key")
-        .to_string();
-    Ok(pem)
+    match RsaPrivateKey::new(&mut rng, bit_size) {
+        Err(error) => Err(error.into()),
+        Ok(priv_key) => {
+            match priv_key.to_pkcs8_pem(LineEnding::LF) {
+                Err(error) => Err(error.into()),
+                Ok(pem) => Ok(pem.to_string())
+            }
+        }
+    }
 }
 
 #[test]
