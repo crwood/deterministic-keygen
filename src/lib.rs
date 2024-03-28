@@ -31,13 +31,9 @@ fn test_generate_phrase_returns_12_words() {
 
 /// Convert a BIP-39 mnemonic phrase to its corresponding entropy.
 pub fn phrase_to_entropy(phrase: &str) -> Result<Vec<u8>, Error> {
-    match Mnemonic::from_phrase(phrase, Language::English) {
-        Err(error) => Err(error),
-        Ok(mnemonic) => {
-            let entropy: &[u8] = mnemonic.entropy();
-            Ok(entropy.to_vec())
-        }
-    }
+    let mnemonic = Mnemonic::from_phrase(phrase, Language::English)?;
+    let entropy: &[u8] = mnemonic.entropy();
+    Ok(entropy.to_vec())
 }
 
 #[test]
@@ -53,15 +49,9 @@ fn test_phrase_to_entropy() {
 pub fn derive_rsa_key(entropy: &Vec<u8>, bit_size: usize) -> Result<String, Error> {
     let seed: [u8; 32] = blake3::derive_key(RSA_CONTEXT, &entropy);
     let mut rng = ChaCha20Rng::from_seed(seed);
-    match RsaPrivateKey::new(&mut rng, bit_size) {
-        Err(error) => Err(error.into()),
-        Ok(priv_key) => {
-            match priv_key.to_pkcs8_pem(LineEnding::LF) {
-                Err(error) => Err(error.into()),
-                Ok(pem) => Ok(pem.to_string())
-            }
-        }
-    }
+    let priv_key = RsaPrivateKey::new(&mut rng, bit_size)?;
+    let pem = priv_key.to_pkcs8_pem(LineEnding::LF)?;
+    Ok(pem.to_string())
 }
 
 #[test]
