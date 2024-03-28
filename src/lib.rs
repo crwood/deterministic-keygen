@@ -6,6 +6,7 @@ use rand_chacha::ChaCha20Rng;
 use rsa::pkcs8::{EncodePrivateKey, LineEnding};
 use rsa::RsaPrivateKey;
 use std::str;
+use anyhow::Error;
 
 // As per the Blake3 docs <https://docs.rs/blake3/latest/blake3/fn.derive_key.html>:
 // "The context string should be hardcoded, globally unique, and application-specific.
@@ -28,10 +29,14 @@ fn test_generate_phrase_returns_12_words() {
 }
 
 /// Convert a BIP-39 mnemonic phrase to its corresponding entropy.
-pub fn phrase_to_entropy(phrase: &str) -> Result<Vec<u8>, bip39::ErrorKind> {
-    let mnemonic = Mnemonic::from_phrase(phrase, Language::English).expect("Invalid mnemonic");
-    let entropy: &[u8] = mnemonic.entropy();
-    Ok(entropy.to_vec())
+pub fn phrase_to_entropy(phrase: &str) -> Result<Vec<u8>, Error> {
+    match Mnemonic::from_phrase(phrase, Language::English) {
+        Err(error) => Err(error),
+        Ok(mnemonic) => {
+            let entropy: &[u8] = mnemonic.entropy();
+            Ok(entropy.to_vec())
+        }
+    }
 }
 
 #[test]
