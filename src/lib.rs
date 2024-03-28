@@ -1,10 +1,12 @@
+use anyhow::Error;
 use bip39::{Language, Mnemonic, MnemonicType};
 use blake3;
+use pyo3::exceptions::{PyValueError, PyRuntimeError};
 use pyo3::prelude::*;
-use rand_chacha::rand_core::SeedableRng;
 use rand_chacha::ChaCha20Rng;
-use rsa::pkcs8::{EncodePrivateKey, LineEnding};
+use rand_chacha::rand_core::SeedableRng;
 use rsa::RsaPrivateKey;
+use rsa::pkcs8::{EncodePrivateKey, LineEnding};
 use std::str;
 
 // As per the Blake3 docs <https://docs.rs/blake3/latest/blake3/fn.derive_key.html>:
@@ -28,8 +30,8 @@ fn test_generate_phrase_returns_12_words() {
 }
 
 /// Convert a BIP-39 mnemonic phrase to its corresponding entropy.
-pub fn phrase_to_entropy(phrase: &str) -> Result<Vec<u8>, bip39::ErrorKind> {
-    let mnemonic = Mnemonic::from_phrase(phrase, Language::English).expect("Invalid mnemonic");
+pub fn phrase_to_entropy(phrase: &str) -> Result<Vec<u8>, Error> {
+    let mnemonic = Mnemonic::from_phrase(phrase, Language::English)?;
     let entropy: &[u8] = mnemonic.entropy();
     Ok(entropy.to_vec())
 }
@@ -44,15 +46,12 @@ fn test_phrase_to_entropy() {
 
 /// Derive an RSA key from a given vector of unsigned 8-bit integers.
 // #[pyfunction]
-pub fn derive_rsa_key(entropy: &Vec<u8>, bit_size: usize) -> Result<String, rsa::Error> {
+pub fn derive_rsa_key(entropy: &Vec<u8>, bit_size: usize) -> Result<String, Error> {
     let seed: [u8; 32] = blake3::derive_key(RSA_CONTEXT, &entropy);
     let mut rng = ChaCha20Rng::from_seed(seed);
-    let priv_key = RsaPrivateKey::new(&mut rng, bit_size).expect("failed to generate private key");
-    let pem = priv_key
-        .to_pkcs8_pem(LineEnding::LF)
-        .expect("failed to encode private key")
-        .to_string();
-    Ok(pem)
+    let priv_key = RsaPrivateKey::new(&mut rng, bit_size)?;
+    let pem = priv_key.to_pkcs8_pem(LineEnding::LF)?;
+    Ok(pem.to_string())
 }
 
 #[test]
@@ -68,8 +67,14 @@ fn test_derive_rsa_key() {
 #[pyfunction]
 #[pyo3(signature = (phrase, bit_size = 2048))]
 pub fn derive_rsa_key_from_phrase(phrase: &str, bit_size: usize) -> PyResult<String> {
-    let entropy = phrase_to_entropy(phrase).unwrap();
-    Ok(derive_rsa_key(&entropy, bit_size).unwrap())
+    let entropy = match phrase_to_entropy(phrase) {
+        Err(error) => return Err(PyValueError::new_err(error.to_string())),
+        Ok(entropy) => entropy,
+    };
+    match derive_rsa_key(&entropy, bit_size) {
+        Err(error) => Err(PyRuntimeError::new_err(error.to_string())),
+        Ok(key) => Ok(key),
+    }
 }
 
 /// Deterministic key-generator.
