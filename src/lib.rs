@@ -67,14 +67,13 @@ fn test_derive_rsa_key() {
 #[pyfunction]
 #[pyo3(signature = (phrase, bit_size = 2048))]
 pub fn derive_rsa_key_from_phrase(phrase: &str, bit_size: usize) -> PyResult<String> {
-    match phrase_to_entropy(phrase) {
-        Err(error) => Err(PyValueError::new_err(error.to_string())),
-        Ok(entropy) => {
-            match derive_rsa_key(&entropy, bit_size) {
-                Err(error) => Err(PyRuntimeError::new_err(error.to_string())),
-                Ok(key) => Ok(key),
-            }
-        }
+    let entropy = match phrase_to_entropy(phrase) {
+        Err(error) => return Err(PyValueError::new_err(error.to_string())),
+        Ok(entropy) => entropy,
+    };
+    match derive_rsa_key(&entropy, bit_size) {
+        Err(error) => Err(PyRuntimeError::new_err(error.to_string())),
+        Ok(key) => Ok(key),
     }
 }
 
