@@ -1,13 +1,13 @@
+use anyhow::Error;
 use bip39::{Language, Mnemonic, MnemonicType};
 use blake3;
-use pyo3::prelude::*;
 use pyo3::exceptions::{PyValueError, PyRuntimeError};
-use rand_chacha::rand_core::SeedableRng;
+use pyo3::prelude::*;
 use rand_chacha::ChaCha20Rng;
-use rsa::pkcs8::{EncodePrivateKey, LineEnding};
+use rand_chacha::rand_core::SeedableRng;
 use rsa::RsaPrivateKey;
+use rsa::pkcs8::{EncodePrivateKey, LineEnding};
 use std::str;
-use anyhow::Error;
 
 // As per the Blake3 docs <https://docs.rs/blake3/latest/blake3/fn.derive_key.html>:
 // "The context string should be hardcoded, globally unique, and application-specific.
