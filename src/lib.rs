@@ -1,6 +1,7 @@
 use bip39::{Language, Mnemonic, MnemonicType};
 use blake3;
 use pyo3::prelude::*;
+use pyo3::exceptions::{PyValueError, PyRuntimeError};
 use rand_chacha::rand_core::SeedableRng;
 use rand_chacha::ChaCha20Rng;
 use rsa::pkcs8::{EncodePrivateKey, LineEnding};
@@ -76,8 +77,15 @@ fn test_derive_rsa_key() {
 #[pyfunction]
 #[pyo3(signature = (phrase, bit_size = 2048))]
 pub fn derive_rsa_key_from_phrase(phrase: &str, bit_size: usize) -> PyResult<String> {
-    let entropy = phrase_to_entropy(phrase).unwrap();
-    Ok(derive_rsa_key(&entropy, bit_size).unwrap())
+    match phrase_to_entropy(phrase) {
+        Err(error) => Err(PyValueError::new_err(error.to_string())),
+        Ok(entropy) => {
+            match derive_rsa_key(&entropy, bit_size) {
+                Err(error) => Err(PyRuntimeError::new_err(error.to_string())),
+                Ok(key) => Ok(key),
+            }
+        }
+    }
 }
 
 /// Deterministic key-generator.
