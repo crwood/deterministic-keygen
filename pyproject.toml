@@ -12,10 +12,10 @@ authors = [
     { name = "Christopher R. Wood", email = "chris@cyberethics.ca" },
 ]
 keywords = [
-    "deterministic"
-    "key-generator"
-    "bip39"
-    "rsa"
+    "deterministic",
+    "key-generator",
+    "bip39",
+    "rsa",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
