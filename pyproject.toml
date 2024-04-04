@@ -4,13 +4,45 @@ build-backend = "maturin"
 
 [project]
 name = "deterministic-keygen"
+description = "Deterministic key-generator"
+readme = "README.md"
 requires-python = ">=3.8"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Christopher R. Wood", email = "chris@cyberethics.ca" },
+]
+keywords = [
+    "deterministic"
+    "key-generator"
+    "bip39"
+    "rsa"
+]
 classifiers = [
-    "Programming Language :: Rust",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: DFSG approved",
+    "License :: OSI Approved",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
+    "Programming Language :: Rust",
+    "Topic :: Security :: Cryptography",
 ]
 dynamic = ["version"]
+
+[project.urls]
+Issues = "https://github.com/crwood/deterministic-keygen/issues"
+Source = "https://github.com/crwood/deterministic-keygen"
+
 
 [tool.maturin]
 features = ["pyo3/extension-module"]
