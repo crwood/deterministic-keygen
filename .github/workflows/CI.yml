@@ -139,6 +139,11 @@ jobs:
       id-token: write
     steps:
       - uses: actions/checkout@v3
+      - name: Publish to crates.io
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: |
+          cargo publish -vv
       - uses: actions/download-artifact@v3
         with:
           name: wheels
@@ -147,8 +152,3 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           print-hash: true
-      - name: Publish to crates.io
-        env:
-          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
-        run: |
-          cargo publish -vv
