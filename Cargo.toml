@@ -4,7 +4,7 @@ version = "0.0.3"
 edition = "2021"
 description = "Deterministic key-generator"
 readme = "README.md"
-license-file = "LICENSE"
+license = "MIT"
 repository = "https://github.com/crwood/deterministic-keygen"
 keywords = [
     "deterministic",
