@@ -138,6 +138,7 @@ jobs:
       # https://docs.pypi.org/trusted-publishers/using-a-publisher/
       id-token: write
     steps:
+      - uses: actions/checkout@v3
       - uses: actions/download-artifact@v3
         with:
           name: wheels
