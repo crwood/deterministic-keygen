@@ -146,3 +146,8 @@ jobs:
         with:
           packages-dir: .
           print-hash: true
+      - name: Publish to crates.io
+        env:
+          CRATES_REGISTRY_TOKEN: ${{ secrets.CRATES_REGISTRY_TOKEN }}
+        run: |
+          cargo publish -vv
