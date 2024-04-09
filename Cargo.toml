@@ -2,6 +2,17 @@
 name = "deterministic-keygen"
 version = "0.0.3"
 edition = "2021"
+description = "Deterministic key-generator"
+readme = "README.md"
+license-file = "LICENSE"
+repository = "https://github.com/crwood/deterministic_keygen"
+keywords = [
+    "deterministic",
+    "key-generator",
+    "bip39",
+    "rsa",
+]
+categories = ["cryptography"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
