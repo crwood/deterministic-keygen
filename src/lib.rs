@@ -3,6 +3,7 @@ use bip39::{Language, Mnemonic, MnemonicType};
 use blake3;
 use pyo3::exceptions::{PyValueError, PyRuntimeError};
 use pyo3::prelude::*;
+use pyo3::types::PyBytes;
 use rand_chacha::ChaCha20Rng;
 use rand_chacha::rand_core::SeedableRng;
 use rsa::RsaPrivateKey;
@@ -45,7 +46,6 @@ fn test_phrase_to_entropy() {
 }
 
 /// Derive an RSA key from a given vector of unsigned 8-bit integers.
-// #[pyfunction]
 pub fn derive_rsa_key(entropy: &Vec<u8>, bit_size: usize) -> Result<String, Error> {
     let seed: [u8; 32] = blake3::derive_key(RSA_CONTEXT, &entropy);
     let mut rng = ChaCha20Rng::from_seed(seed);
@@ -61,6 +61,17 @@ fn test_derive_rsa_key() {
     let key1 = derive_rsa_key(&entropy, 512).unwrap();
     let key2 = derive_rsa_key(&entropy, 512).unwrap();
     assert_eq!(key1, key2);
+}
+
+/// Derive an RSA key from a given sequence of bytes.
+#[pyfunction]
+#[pyo3(name = "derive_rsa_key")]
+#[pyo3(signature = (entropy, bit_size = 2048))]
+pub fn py_derive_rsa_key(entropy: &PyBytes, bit_size: usize) -> PyResult<String> {
+    match derive_rsa_key(&Vec::from(entropy.as_bytes()), bit_size) {
+        Err(error) => Err(PyRuntimeError::new_err(error.to_string())),
+        Ok(key) => Ok(key),
+    }
 }
 
 /// Derive an RSA key from a given BIP-39 mnemonic phrase.
@@ -81,6 +92,7 @@ pub fn derive_rsa_key_from_phrase(phrase: &str, bit_size: usize) -> PyResult<Str
 #[pymodule]
 fn deterministic_keygen(_py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(generate_phrase, m)?)?;
+    m.add_function(wrap_pyfunction!(py_derive_rsa_key, m)?)?;
     m.add_function(wrap_pyfunction!(derive_rsa_key_from_phrase, m)?)?;
     Ok(())
 }
