@@ -8,8 +8,6 @@ use crate::phrase::{generate_phrase, phrase_to_entropy};
 mod rsa;
 use crate::rsa::derive_rsa_key;
 
-mod lafs;
-
 /// Generate a new BIP-39 mnemonic phrase.
 #[pyfunction]
 #[pyo3(name = "generate_phrase")]
