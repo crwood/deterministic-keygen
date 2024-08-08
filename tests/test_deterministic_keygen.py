@@ -89,13 +89,12 @@ def test_derive_lafs_mutable() -> None:
         if kind == "ssk":
             key = vector["format"]["params"]["key"]
             format = vector["format"]["params"]["format"]
-            match format:
-                case "sdmf":
-                    format = "SSK"
-                case "mdmf":
-                    format = "MDMF"
-                case _:
-                    raise ValueError(f"Unknown format: {format}")
+            if format == "sdmf":
+                format = "SSK"
+            elif format == "mdmf":
+                format = "MDMF"
+            else:
+                raise ValueError(f"Unknown format: {format}")
             result = derive_lafs_mutable(key, format)
             expected = vector["expected"]
             assert result == expected
