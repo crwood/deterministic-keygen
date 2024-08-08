@@ -3,6 +3,13 @@ from pathlib import Path
 import pytest
 import yaml
 
+from allmydata.util.base32 import b2a
+from allmydata.util.hashutil import (
+    _SHA256d_Hasher,  # XXX
+    ssk_pubkey_fingerprint_hash,
+    ssk_writekey_hash,
+)
+from cryptography.hazmat.primitives import serialization
 from deterministic_keygen import (
     generate_phrase,
     derive_rsa_key,
@@ -38,6 +45,17 @@ def test_derive_rsa_key_from_phrase() -> None:
     key1 = derive_rsa_key_from_phrase(phrase)
     key2 = derive_rsa_key_from_phrase(phrase)
     assert key1 == key2
+
+
+@pytest.mark.parametrize("data, expected", [
+    (b"", b"lx3obytwcnm5gcucoucy4km7zqbycu2fix2vz5b6igmd6xkmsrla"),
+    (b"test", b"svgvusp5odm3rpg3gxjfejtyfgkx67xx7jwhj6eedg64l2bcbh2a"),
+])
+def test_sha256d(data, expected) -> None:
+    hasher = _SHA256d_Hasher()
+    hasher.update(data)
+    digest = hasher.digest()
+    assert b2a(digest) == expected
 
 
 def test_derive_lafs_mutable() -> None:
