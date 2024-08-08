@@ -88,10 +88,14 @@ def test_derive_lafs_mutable() -> None:
         kind = vector["format"]["kind"]
         if kind == "ssk":
             key = vector["format"]["params"]["key"]
-            print(key)
+            format = vector["format"]["params"]["format"]
+            match format:
+                case "sdmf":
+                    format = "SSK"
+                case "mdmf":
+                    format = "MDMF"
+                case _:
+                    raise ValueError(f"Unknown format: {format}")
+            result = derive_lafs_mutable(key, format)
             expected = vector["expected"]
-            parts = expected.split(":")
-            writekey = parts[2]
-            fingerprint = parts[3]
-            print(expected, writekey, fingerprint)
-    assert False, "Not yet implemented"
+            assert result == expected
