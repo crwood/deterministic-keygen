@@ -41,7 +41,7 @@ def test_derive_rsa_key_from_phrase() -> None:
 
 
 def test_derive_lafs_mutable() -> None:
-    with open(Path(__file__).parent / "vectors" / "lafs.yaml") as f:
+    with open(Path(__file__).parent.parent / "lafs" / "tests" / "vectors" / "lafs.yaml") as f:
         data = yaml.safe_load(f)
     for vector in data["vector"]:
         kind = vector["format"]["kind"]
