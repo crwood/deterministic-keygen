@@ -59,5 +59,6 @@ skip_missing_interpreters = True
 deps =
     pytest
     pyyaml
+    tahoe-lafs
 commands = {env_python} -m pytest --verbose --capture=no tests {posargs}
 """
