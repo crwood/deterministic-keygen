@@ -7,7 +7,7 @@ from deterministic_keygen import (
     generate_phrase,
     derive_rsa_key,
     derive_rsa_key_from_phrase,
-    # derive_lafs_mutable,
+    derive_lafs_mutable,
 )
 
 
