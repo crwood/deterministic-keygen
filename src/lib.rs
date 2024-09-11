@@ -7,6 +7,8 @@ use crate::phrase::{generate_phrase, phrase_to_entropy};
 mod rsa;
 use crate::rsa::derive_rsa_key;
 
+use lafs::derive_lafs_mutable;
+
 /// Generate a new BIP-39 mnemonic phrase.
 #[pyfunction]
 #[pyo3(name = "generate_phrase")]
@@ -39,11 +41,19 @@ pub fn derive_rsa_key_from_phrase(phrase: &str, bit_size: usize) -> PyResult<Str
     }
 }
 
+/// Derive a Tahoe-LAFS mutable URI from an RSA private key.
+#[pyfunction]
+#[pyo3(name = "derive_lafs_mutable")]
+pub fn py_derive_lafs_mutable(private_key_pem: &str, format: &str) -> String {
+    derive_lafs_mutable(private_key_pem, format)
+}
+
 /// Deterministic key-generator.
 #[pymodule]
 fn deterministic_keygen(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(py_generate_phrase, m)?)?;
     m.add_function(wrap_pyfunction!(py_derive_rsa_key, m)?)?;
     m.add_function(wrap_pyfunction!(derive_rsa_key_from_phrase, m)?)?;
+    m.add_function(wrap_pyfunction!(py_derive_lafs_mutable, m)?)?;
     Ok(())
 }
