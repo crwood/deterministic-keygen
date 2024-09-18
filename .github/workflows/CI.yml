@@ -85,7 +85,7 @@ jobs:
           path: dist
 
   macos:
-    runs-on: macos-12
+    runs-on: macos-latest
     strategy:
       matrix:
         target: [x86_64, aarch64]
@@ -96,11 +96,9 @@ jobs:
           python-version: '3.10'
       - name: Run tests (Rust)
         run: |
-          cargo clean
           cargo test -- --nocapture
       - name: Run tests (Python)
         run: |
-          cargo clean
           python -m pip install tox
           python -m tox
       - name: Build wheels
