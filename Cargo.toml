@@ -22,6 +22,7 @@ crate-type = ["cdylib"]
 [dependencies]
 anyhow = "1.0.89"
 blake3 = "1.5.4"
+lafs = "0.0.3"
 pyo3 = "0.22.3"
 rand_chacha = "0.3.1"
 rsa = "0.9.6"
