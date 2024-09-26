@@ -22,7 +22,7 @@ crate-type = ["cdylib"]
 [dependencies]
 anyhow = "1.0.89"
 blake3 = "1.5.4"
-lafs = { git = "https://github.com/crwood/lafs.git" }
+lafs = { git = "https://github.com/crwood/lafs.git" , branch = "no-pyo3-experiment" }
 pyo3 = "0.22.3"
 rand_chacha = "0.3.1"
 rsa = "0.9.6"
