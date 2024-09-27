@@ -98,11 +98,15 @@ jobs:
         run: |
           cargo test -- --nocapture
       - name: Run tests (Python)
+        env:
+          RUSTFLAGS: "-C link-arg=-undefined -C link-arg=dynamic_lookup"
         run: |
           python -m pip install tox
           python -m tox
       - name: Build wheels
         uses: PyO3/maturin-action@v1
+        env:
+          RUSTFLAGS: "-C link-arg=-undefined -C link-arg=dynamic_lookup"
         with:
           target: ${{ matrix.target }}
           args: --release --out dist --find-interpreter
