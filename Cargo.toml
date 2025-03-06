@@ -20,12 +20,13 @@ name = "deterministic_keygen"
 crate-type = ["cdylib"]
 
 [dependencies]
-anyhow = "1.0.89"
-blake3 = "1.5.4"
-pyo3 = "0.22.3"
+anyhow = "1.0.97"
+blake3 = "1.6.1"
+pyo3 = "0.23.5"
 rand_chacha = "0.3.1"
-rsa = "0.9.6"
+rsa = "0.9.7"
 tiny-bip39 = "1.0.0"
 
 [dev-dependencies]
+# rsa does not yet support rand 0.9: https://github.com/RustCrypto/RSA/issues/466
 rand = "0.8.5"
